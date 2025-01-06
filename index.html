@@ -29,6 +29,23 @@
             margin: 0;
             padding-bottom: 10px;
         }
+        nav {
+            background: #333;
+            color: #fff;
+            padding: 10px 0;
+        }
+        nav ul {
+            padding: 0;
+            list-style: none;
+        }
+        nav li {
+            display: inline;
+            margin-right: 20px;
+        }
+        nav a {
+            color: #fff;
+            text-decoration: none;
+        }
         .content {
             margin-top: 20px;
             background: white;
@@ -44,12 +61,12 @@
             bottom: 0;
             width: 100%;
         }
-        .project {
+        .hobby {
             display: flex;
             align-items: center;
             margin-bottom: 20px;
         }
-        .project img {
+        .hobby img {
             width: 100px;
             height: 100px;
             object-fit: cover;
@@ -65,40 +82,49 @@
         </div>
     </header>
 
+    <nav>
+        <div class="container">
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="gaming.html">Gaming</a></li>
+            </ul>
+        </div>
+    </nav>
+
     <div class="container">
         <div class="content">
             <h2>Welcome to My Personal Website</h2>
-            <p>Hello! I'm Leo Chen. This is my personal website where I share information about myself and my work.</p>
+            <p>Hello! I'm Leo Chen. This is my personal website where I share information about myself and my hobbies.</p>
             <h3>About Me</h3>
-            <p>I am passionate about technology and software development. I love sports, art, and music.</p>
+            <p>I am passionate about technology and software development. With experience in web development, I am always eager to take on new challenges and learn more. In my free time, I love playing basketball, enjoying video games, and listening to or playing music.</p>
             <h3>My Hobbies</h3>
-            <p>Here are some of the hobbies I've worked on:</p>
-            <div class="project">
-                <img src="./2C7BA8FF-511A-4090-B88E-6EFA6D30B914.jpeg" alt="Basketball">
+            <p>Here are some of my favorite hobbies:</p>
+            <div class="hobby">
+                <img src="/placeholder.svg?height=100&width=100" alt="Basketball">
                 <div>
-                    <h4>Hobby 1: Basketball</h4>
-                    <p>A web application for tracking personal basketball statistics and performance.</p>
+                    <h4>Basketball</h4>
+                    <p>I enjoy playing basketball regularly to stay active and have fun with friends.</p>
                 </div>
             </div>
-            <div class="project">
-                <img src="./IMG_7052.jpeg" alt="Piano">
+            <div class="hobby">
+                <img src="/placeholder.svg?height=100&width=100" alt="Piano">
                 <div>
-                    <h4>Project 2: Piano</h4>
-                    <p>Here I will give some feedback about piano.</p>
+                    <h4>Music</h4>
+                    <p>I love playing the piano and listening to various genres of music in my free time.</p>
                 </div>
             </div>
-            <div class="project">
+            <div class="hobby">
                 <img src="/placeholder.svg?height=100&width=100" alt="Gaming">
                 <div>
-                    <h4>Project 3: Game Review Blog</h4>
-                    <p>A blog where I share my thoughts and reviews on the latest video games. I also give you my personel favorites.</p>
+                    <h4>Gaming</h4>
+                    <p>Video games are a great way for me to relax and enjoy immersive storytelling. Check out my <a href="gaming.html">gaming page</a> for more!</p>
                 </div>
             </div>
         </div>
     </div>
 
     <footer>
-        <p>&copy; 2025 Leo Chen. All rights reserved. Special thanks to Vercel.</p>
+        <p>&copy; 2023 Leo Chen. All rights reserved.</p>
     </footer>
 </body>
 </html>
