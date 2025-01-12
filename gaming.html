@@ -3,128 +3,261 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Leo Chen - Personal Website</title>
+    <title>Leo's Typing Game</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            line-height: 1.6;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-        }
-        .container {
-            width: 80%;
-            margin: auto;
-            overflow: hidden;
-            padding: 20px;
-        }
-        header {
-            background: #50b3a2;
-            color: white;
-            padding-top: 30px;
-            min-height: 70px;
-            text-align: center;
-        }
-        header h1 {
-            margin: 0;
-            padding-bottom: 10px;
-        }
-        nav {
-            background: #333;
-            color: #fff;
-            padding: 10px 0;
-        }
-        nav ul {
-            padding: 0;
-            list-style: none;
-        }
-        nav li {
-            display: inline;
-            margin-right: 20px;
-        }
-        nav a {
-            color: #fff;
-            text-decoration: none;
-        }
-        .content {
-            margin-top: 20px;
-            background: white;
-            padding: 20px;
-            border-radius: 5px;
-        }
-        footer {
-            background: #50b3a2;
-            color: white;
-            text-align: center;
-            padding: 10px;
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-        }
-        .hobby {
             display: flex;
+            justify-content: center;
             align-items: center;
-            margin-bottom: 20px;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
         }
-        .hobby img {
-            width: 100px;
-            height: 100px;
-            object-fit: cover;
-            margin-right: 20px;
-            border-radius: 5px;
+        .game-container {
+            text-align: center;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            width: 80%;
+            max-width: 600px;
+        }
+        #word-display {
+            font-size: 24px;
+            margin: 20px 0 10px;
+            min-height: 36px;
+        }
+        #definition-display {
+            font-size: 16px;
+            margin: 0 0 20px;
+            min-height: 48px;
+            color: #666;
+        }
+        #word-input {
+            font-size: 18px;
+            padding: 5px;
+            width: 80%;
+            max-width: 300px;
+        }
+        #time-select {
+            margin: 10px 0;
+        }
+        #start-button, #reset-button {
+            font-size: 18px;
+            padding: 10px 20px;
+            margin: 10px;
+            cursor: pointer;
+        }
+        #timer, #word-count {
+            font-size: 18px;
+            margin: 10px 0;
+        }
+        .toggle-container {
+            margin: 10px 0;
         }
     </style>
 </head>
 <body>
-    <header>
-        <div class="container">
-            <h1>Leo Chen</h1>
+    <div class="game-container">
+        <h1>Leo's Typing Game</h1>
+        <div>
+            <label for="time-select">Select time limit:</label>
+            <select id="time-select">
+                <option value="60">1 minute</option>
+                <option value="120">2 minutes</option>
+                <option value="300">5 minutes</option>
+                <option value="600">10 minutes</option>
+                <option value="900">15 minutes</option>
+            </select>
         </div>
-    </header>
-
-    <nav>
-        <div class="container">
-            <ul>
-                <li><a href="index.html">Home</a></li>
-                <li><a href="gaming.html">Gaming</a></li>
-            </ul>
-        </div>
-    </nav>
-
-    <div class="container">
-        <div class="content">
-            <h2>Welcome to My Personal Website</h2>
-            <p>Hello! I'm Leo Chen. This is my personal website where I share information about myself and my hobbies.</p>
-            <h3>About Me</h3>
-            <p>I am passionate about technology and software development. With experience in web development, I am always eager to take on new challenges and learn more. In my free time, I love playing basketball, enjoying video games, and listening to or playing music.</p>
-            <h3>My Hobbies</h3>
-            <p>Here are some of my favorite hobbies:</p>
-            <div class="hobby">
-                <img src="/placeholder.svg?height=100&width=100" alt="Basketball">
-                <div>
-                    <h4>Basketball</h4>
-                    <p>I enjoy playing basketball regularly to stay active and have fun with friends.</p>
-                </div>
-            </div>
-            <div class="hobby">
-                <img src="/placeholder.svg?height=100&width=100" alt="Piano">
-                <div>
-                    <h4>Music</h4>
-                    <p>I love playing the piano and listening to various genres of music in my free time.</p>
-                </div>
-            </div>
-            <div class="hobby">
-                <img src="/placeholder.svg?height=100&width=100" alt="Gaming">
-                <div>
-                    <h4>Gaming</h4>
-                    <p>Video games are a great way for me to relax and enjoy immersive storytelling. Check out my <a href="gaming.html">gaming page</a> for more!</p>
-                </div>
-            </div>
+        <div id="word-display"></div>
+        <div id="definition-display"></div>
+        <input type="text" id="word-input" autocomplete="off" disabled>
+        <div id="timer">Time left: 0:00</div>
+        <div id="word-count">Words typed: 0</div>
+        <button id="start-button">Start Game</button>
+        <button id="reset-button" disabled>Reset Game</button>
+        <div class="toggle-container">
+            <label for="definition-toggle">Show definitions:</label>
+            <input type="checkbox" id="definition-toggle" checked>
         </div>
     </div>
 
-    <footer>
-        <p>&copy; 2023 Leo Chen. All rights reserved.</p>
-    </footer>
+    <script>
+        const wordDisplay = document.getElementById('word-display');
+        const definitionDisplay = document.getElementById('definition-display');
+        const wordInput = document.getElementById('word-input');
+        const timeSelect = document.getElementById('time-select');
+        const timerDisplay = document.getElementById('timer');
+        const wordCountDisplay = document.getElementById('word-count');
+        const startButton = document.getElementById('start-button');
+        const resetButton = document.getElementById('reset-button');
+        const definitionToggle = document.getElementById('definition-toggle');
+
+        let currentWord = '';
+        let wordCount = 0;
+        let timeLeft = 0;
+        let timer;
+
+        const words = [
+            'apple', 'banana', 'cherry', 'date', 'elderberry', 'fig', 'grape', 'honeydew',
+            'kiwi', 'lemon', 'mango', 'nectarine', 'orange', 'papaya', 'quince', 'raspberry',
+            'strawberry', 'tangerine', 'watermelon', 'zucchini', 'broccoli', 'carrot', 'potato',
+            'tomato', 'spinach', 'lettuce', 'cucumber', 'pepper', 'onion', 'garlic', 'ginger',
+            'computer', 'keyboard', 'mouse', 'monitor', 'speaker', 'microphone', 'camera',
+            'printer', 'scanner', 'router', 'laptop', 'tablet', 'smartphone', 'headphones',
+            'book', 'pencil', 'pen', 'notebook', 'backpack', 'desk', 'chair', 'lamp', 'clock',
+            'calendar', 'scissors', 'stapler', 'paperclip', 'ruler', 'eraser', 'glue', 'tape'
+        ];
+
+        const definitions = {
+            'apple': 'A round fruit with red or green skin and white flesh.',
+            'banana': 'A long curved fruit with a yellow skin.',
+            'cherry': 'A small round stone fruit, typically bright or dark red.',
+            'date': 'A sweet brown fruit from a palm tree.',
+            'elderberry': 'A small dark purple fruit used in wines and jams.',
+            'fig': 'A soft pear-shaped fruit with sweet dark flesh and small seeds.',
+            'grape': 'A small, sweet fruit growing in clusters on a vine.',
+            'honeydew': 'A type of melon with a smooth, pale rind and sweet green flesh.',
+            'kiwi': 'An oval fruit with brown fuzzy skin and green flesh.',
+            'lemon': 'A yellow citrus fruit with sour juice.',
+            'mango': 'A fleshy, oval tropical fruit with a large flat seed.',
+            'nectarine': 'A smooth-skinned variety of peach.',
+            'orange': 'A round citrus fruit with a tough bright reddish-yellow rind.',
+            'papaya': 'A tropical fruit with soft, orange flesh and black seeds.',
+            'quince': 'A hard, acid pear-shaped fruit used in preserves.',
+            'raspberry': 'An edible soft fruit related to the blackberry.',
+            'strawberry': 'A sweet soft red fruit with seeds on its surface.',
+            'tangerine': 'A small citrus fruit similar to an orange but easier to peel.',
+            'watermelon': 'A large fruit with a green rind and sweet, juicy, red flesh.',
+            'zucchini': 'A long, green summer squash.',
+            'broccoli': 'A green vegetable with a thick stem and dense round flower head.',
+            'carrot': 'An orange root vegetable.',
+            'potato': 'A starchy plant tuber.',
+            'tomato': 'A red, or occasionally yellow, pulpy edible fruit.',
+            'spinach': 'A vegetable with large dark green leaves.',
+            'lettuce': 'A cultivated plant with edible leaves, often used in salads.',
+            'cucumber': 'A long, green-skinned fruit with watery flesh.',
+            'pepper': 'A vegetable with a mild or hot flavor.',
+            'onion': 'An edible bulb with a pungent taste and smell.',
+            'garlic': 'A strong-smelling pungent-tasting bulb.',
+            'ginger': 'A hot, fragrant spice made from the rhizome of a plant.',
+            'computer': 'An electronic device for storing and processing data.',
+            'keyboard': 'A panel of keys for operating a computer.',
+            'mouse': 'A small handheld device for controlling a computer cursor.',
+            'monitor': 'A screen used to display output from a computer.',
+            'speaker': 'A device that converts electrical signals into sound.',
+            'microphone': 'An instrument for converting sound into electrical signals.',
+            'camera': 'A device for recording visual images in the form of photographs.',
+            'printer': 'A machine for printing text or pictures onto paper.',
+            'scanner': 'A device for examining, reading, or copying data or images.',
+            'router': 'A device that forwards data packets between computer networks.',
+            'laptop': 'A portable computer, small enough to use on one\'s lap.',
+            'tablet': 'A small portable computer with a touchscreen.',
+            'smartphone': 'A mobile phone that performs many functions of a computer.',
+            'headphones': 'A pair of speakers worn over the ears to listen to audio.',
+            'book': 'A written or printed work consisting of pages bound together.',
+            'pencil': 'An instrument for writing or drawing, with a wood casing and lead core.',
+            'pen': 'An instrument for writing or drawing with ink.',
+            'notebook': 'A book with blank pages for writing notes.',
+            'backpack': 'A bag with shoulder straps for carrying things on one\'s back.',
+            'desk': 'A piece of furniture with a flat or sloped surface for writing.',
+            'chair': 'A separate seat for one person, typically with a back and four legs.',
+            'lamp': 'A device for giving light, either electric or oil-based.',
+            'clock': 'A mechanical or electrical device for measuring time.',
+            'calendar': 'A chart or series of pages showing the days, weeks, and months of a year.',
+            'scissors': 'An instrument used for cutting paper, cloth, etc.',
+            'stapler': 'A device for fastening sheets of paper with small metal clips.',
+            'paperclip': 'A bent piece of wire used for holding papers together.',
+            'ruler': 'A straight strip for drawing lines and measuring lengths.',
+            'eraser': 'An object used for rubbing out something written.',
+            'glue': 'An adhesive substance for sticking objects or materials together.',
+            'tape': 'A narrow strip of material used to hold or fasten something.'
+        };
+
+        function getRandomWord() {
+            return words[Math.floor(Math.random() * words.length)];
+        }
+
+        function getWordDefinition(word) {
+            return definitions[word] || 'Definition not available.';
+        }
+
+        function updateTimer() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            timerDisplay.textContent = `Time left: ${minutes}:${seconds.toString().padStart(2, '0')}`;
+            
+            if (timeLeft === 0) {
+                endGame();
+            } else {
+                timeLeft--;
+            }
+        }
+
+        function startGame() {
+            wordCount = 0;
+            timeLeft = parseInt(timeSelect.value);
+            wordCountDisplay.textContent = 'Words typed: 0';
+            startButton.disabled = true;
+            resetButton.disabled = false;
+            wordInput.disabled = false;
+            wordInput.focus();
+            
+            updateTimer();
+            timer = setInterval(updateTimer, 1000);
+            
+            nextWord();
+        }
+
+        function endGame() {
+            clearInterval(timer);
+            wordDisplay.textContent = 'Game Over!';
+            definitionDisplay.textContent = '';
+            wordInput.disabled = true;
+            startButton.disabled = false;
+        }
+
+        function resetGame() {
+            clearInterval(timer);
+            wordDisplay.textContent = '';
+            definitionDisplay.textContent = '';
+            wordInput.value = '';
+            wordInput.disabled = true;
+            timerDisplay.textContent = 'Time left: 0:00';
+            wordCountDisplay.textContent = 'Words typed: 0';
+            startButton.disabled = false;
+            resetButton.disabled = true;
+        }
+
+        function nextWord() {
+            currentWord = getRandomWord();
+            wordDisplay.textContent = currentWord;
+            updateDefinition();
+        }
+
+        function updateDefinition() {
+            if (definitionToggle.checked) {
+                definitionDisplay.textContent = getWordDefinition(currentWord);
+            } else {
+                definitionDisplay.textContent = '';
+            }
+        }
+
+        wordInput.addEventListener('input', () => {
+            if (wordInput.value === currentWord) {
+                wordCount++;
+                wordCountDisplay.textContent = `Words typed: ${wordCount}`;
+                wordInput.value = '';
+                nextWord();
+            }
+        });
+
+        startButton.addEventListener('click', startGame);
+        resetButton.addEventListener('click', resetGame);
+        definitionToggle.addEventListener('change', updateDefinition);
+    </script>
 </body>
 </html>
+
